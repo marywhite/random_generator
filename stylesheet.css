@@ -1,0 +1,19 @@
+body {
+	font-family: 'Inconsolata', sans-serif;
+	text-align: center;
+}
+
+h1 {
+	color: #FF704D;
+}
+
+h1:hover {
+	color: #DDDDDD;
+}
+
+#generate {
+	width: 5%;
+	border-style: 1px solid black;
+}
+
+
