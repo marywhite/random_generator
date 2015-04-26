@@ -11,17 +11,44 @@ h1:hover {
 	color: #DDDDDD;
 }
 
-#generate {
-	width: 5%;
-	border-style: 1px solid black;
-}
 
 ul {
 	list-style-type: none;
 	position: fixed;
 }
 
-.classgroup {
+.container {
 	display: inline-block;
 	width: 10%;
 }
+
+.selected {
+	background-color: yellow;
+}
+
+#generate {
+	border: thin solid black;
+	display: inline-block;
+	padding: .5em;
+	margin: 4em 0;
+}
+
+.numbers {
+	float: left;
+	width: 30%;
+	display: inline-block;
+}
+
+.sizes {
+	float: right;
+	width: 30%;
+	display: inline-block;
+}
+
+.groupButton, .sizeButton {
+	width: 1em;
+	border: thin solid black;
+	display: inline;
+	padding: .5em;
+}
+

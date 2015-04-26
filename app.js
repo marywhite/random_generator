@@ -15,9 +15,7 @@ APP.randomNumber = function randomNumber(min, max) {
 // Define the numberClassGroups constructor
 var NumberClassGroups = function(numGroups, namesArray) {
 	this.numGroups = numGroups,
-	this.classNames = namesArray
-	// this.baseGroupSize = Math.floor(this.classNames.length / this.numGroups),
-	// this.extras = this.classNames.length % this.numGroups	
+	this.classNames = namesArray	
 };
 
 //set base group size and extras for number numberClassGroups
@@ -69,12 +67,16 @@ SizeClassGroups.prototype.getGroupNumber = function () {
 
 $(document).ready(function (){
 	$(".groupButton").click(function(){
-		$('.groupButton.selected').removeClass('selected');
+		$('.selected').removeClass('selected');
+		$(this).addClass('selected');
+	});
+	$(".sizeButton").click(function(){
+		$('.selected').removeClass('selected');
 		$(this).addClass('selected');
 	});
 
 	$("#generate").click(function(){
-		$(".classgroup").remove();
+		$(".container").remove();
 		var numGroups = ($(".groupButton.selected").text());
 		var classGroups = new NumberClassGroups(numGroups, APP.ids.classNames);
 		classGroups.organizeGroups();
@@ -82,11 +84,10 @@ $(document).ready(function (){
 		classGroups.generateGroups();
 		var nameId = 0;
 		for ( var i = 0; i < classGroups.numGroups; i++){
-			$("body").append("<div class=classgroup> <ul id ='group" + (i+1) + "'>Group "  + (i+1) + "</ul></div>");
+			$(".listArea").append("<div class=container> <ul id ='group" + (i+1) + "'>Group "  + (i+1) + "</ul></div>");
 			for (var j = 0; j < classGroups["group" + (i+1)].length; j++){
-				var omg = (classGroups["group" + (i+1)][j]);
 				nameId++;
-				$("<li id='name" + nameId + "'>"  + (omg) + "</li>").appendTo("#group"+(i+1)).hide();
+				$("<li id='name" + nameId + "'>"  + classGroups["group" + (i+1)][j] + "</li>").appendTo("#group"+(i+1)).hide();
 				$("#name"+nameId).delay(nameId * 500).slideDown("slow");
 			}
 		}
