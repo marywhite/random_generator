@@ -16,4 +16,12 @@ h1:hover {
 	border-style: 1px solid black;
 }
 
+ul {
+	list-style-type: none;
+	position: fixed;
+}
 
+.classgroup {
+	display: inline-block;
+	width: 10%;
+}

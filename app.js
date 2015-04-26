@@ -1,65 +1,97 @@
+// global namespace
+var APP = APP || {};
 
-$(document).ready(function (){
+// // global variables
+APP.ids = {
+  classNames: ["Aaron", "Alicia", "Brian", "Casie", "Chelsea", "Clare", "Cody", "Eric", "Jeanne", "Kaitlin", "Kelly", "Luke", "Mary", "Michael", "Michelle", "Rom", "Steve", "Terry", "Tracy", "Vince"],
+}
 
-});
-
-var classNames = ["Aaron", "Alicia", "Brian", "Casie", "Chelsea", "Clare", "Cody", "Eric", "Jeanne", "Kaitlin", "Kelly", "Luke", "Mary", "Michael", "Michelle", "Rom", "Steve", "Terry", "Tracy", "Vince"];
-
-
-function randomNumber(min, max) {
+// global helpers
+APP.randomNumber = function randomNumber(min, max) {
 	return Math.floor(Math.random() * (1 + max - min) + min);
 }
 
-function shuffleClass(){
+
+// Define the numberClassGroups constructor
+var NumberClassGroups = function(numGroups, namesArray) {
+	this.numGroups = numGroups,
+	this.classNames = namesArray
+	// this.baseGroupSize = Math.floor(this.classNames.length / this.numGroups),
+	// this.extras = this.classNames.length % this.numGroups	
+};
+
+//set base group size and extras for number numberClassGroups
+NumberClassGroups.prototype.organizeGroups = function (){
+	this.baseGroupSize = this.classNames.length / this.numGroups,
+	this.extras = Math.floor(this.classNames.length % this.numGroups);	
+}
+
+//shuffle classNames into new array
+NumberClassGroups.prototype.shuffleClass = function (){
+	var newList = this.classNames.slice(0);
 	var randomi;
-	var shuffledClass = [];
-	while(classNames.length > 0){
-		randomi = randomNumber( 0, classNames.length-1);
-		shuffledClass.push(classNames[randomi]);
-		classNames.splice(randomi, 1);
-	}
-	return shuffledClass;
+	var shuffledArray = [];
+		while(newList.length > 0){
+			randomi = APP.randomNumber( 0, newList.length-1);
+			shuffledArray.push(newList[randomi]);
+			newList.splice(randomi, 1);
+		} this.shuffledArray = shuffledArray;
 }
 
-function Button(size) {
-	this.size = size;
-}
-
-var classGroups = {
-	one: [],
-	two: [],
-	three: [],
-	four: [],
-	five: [],
-	six: [],
-	seven: [],
-	eight: [],
-	nine: [],
-}
-
-Button.prototype.generateGroups = function(){
-	var baseGroup = Math.floor(20 / this.size);
-	var extras = 20 % this.size;
-	for (var i = 0; i < this.size; i++){
-		if (extras > 0){
-		this["group"+(i+1)] = crazyClass.splice(0, baseGroup);
-		extras--;
+//create groups from shuffledClass
+NumberClassGroups.prototype.generateGroups = function () {
+	for (var i = 0; i < this.numGroups; i++){
+		if (this.extras > 0){
+			this["group"+(i+1)] = this.shuffledArray.splice(0, this.baseGroupSize+1);
+			this.extras--;
 		}else{
-			this["group"+(i+1)] = crazyClass.splice(0, baseGroup-1);
+			this["group"+(i+1)] = this.shuffledArray.splice(0, this.baseGroupSize);
 		}
 	}
 }
-var crazyClass = (shuffleClass());
-var hi = new Button(9);
-hi.generateGroups();
-console.log(hi)
 
 
-// Button.prototype.shuffleClass = function() {
-// 	shuffledClass = [];
-// 	while(classNames.length > 0){
-// 		shuffledClass.push(classNames[randomNumber, classNames.length]);
-// 		classNames.splice(5, 1);
-// 	}
-// };
+//Define the SizeClassGroups constructor
+var SizeClassGroups = function(groupSize, classNames) {
+	this.classNames = classNames,
+	this.baseGroupSize = groupSize
+};
+
+SizeClassGroups.prototype = new NumberClassGroups();        
+SizeClassGroups.prototype.constructor = SizeClassGroups;
+
+
+//Set 
+SizeClassGroups.prototype.getGroupNumber = function () {
+	this.numGroups = Math.floor(this.classNames.length / this.baseGroupSize);
+	this.extras = this.classNames.length % this.baseGroupSize;
+}
+
+$(document).ready(function (){
+	$(".groupButton").click(function(){
+		$('.groupButton.selected').removeClass('selected');
+		$(this).addClass('selected');
+	});
+
+	$("#generate").click(function(){
+		$(".classgroup").remove();
+		var numGroups = ($(".groupButton.selected").text());
+		var classGroups = new NumberClassGroups(numGroups, APP.ids.classNames);
+		classGroups.organizeGroups();
+		classGroups.shuffleClass();
+		classGroups.generateGroups();
+		var nameId = 0;
+		for ( var i = 0; i < classGroups.numGroups; i++){
+			$("body").append("<div class=classgroup> <ul id ='group" + (i+1) + "'>Group "  + (i+1) + "</ul></div>");
+			for (var j = 0; j < classGroups["group" + (i+1)].length; j++){
+				var omg = (classGroups["group" + (i+1)][j]);
+				nameId++;
+				$("<li id='name" + nameId + "'>"  + (omg) + "</li>").appendTo("#group"+(i+1)).hide();
+				$("#name"+nameId).delay(nameId * 500).slideDown("slow");
+			}
+		}
+	});
+});
+
+
 
