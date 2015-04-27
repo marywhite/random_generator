@@ -62,7 +62,7 @@ SizeClassGroups.prototype.constructor = SizeClassGroups;
 //Set 
 SizeClassGroups.prototype.getGroupNumber = function () {
 	this.numGroups = Math.floor(this.classNames.length / this.baseGroupSize);
-	this.extras = this.classNames.length % this.baseGroupSize;
+	this.extras = this.classNames.length - (this.numGroups * this.baseGroupSize);
 }
 
 $(document).ready(function (){
@@ -77,11 +77,23 @@ $(document).ready(function (){
 
 	$("#generate").click(function(){
 		$(".container").remove();
-		var numGroups = ($(".groupButton.selected").text());
-		var classGroups = new NumberClassGroups(numGroups, APP.ids.classNames);
-		classGroups.organizeGroups();
+		var classGroups;
+		if ($(".selected").is(".groupButton")){
+			var numGroups = ($(".groupButton.selected").text());
+			classGroups = new NumberClassGroups(numGroups, APP.ids.classNames);
+			classGroups.organizeGroups();
+		} else {
+			var groupSize = ($(".sizeButton.selected").text());
+			classGroups = new SizeClassGroups(groupSize, APP.ids.classNames);
+			classGroups.getGroupNumber();
+			console.log(classGroups);
+		}
+		
 		classGroups.shuffleClass();
+		console.log(classGroups);
 		classGroups.generateGroups();
+		console.log(classGroups);
+		
 		var nameId = 0;
 		for ( var i = 0; i < classGroups.numGroups; i++){
 			$(".listArea").append("<div class=container> <ul id ='group" + (i+1) + "'>Group "  + (i+1) + "</ul></div>");
