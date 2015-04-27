@@ -20,7 +20,7 @@ var NumberClassGroups = function(numGroups, namesArray) {
 
 //set base group size and extras for number numberClassGroups
 NumberClassGroups.prototype.organizeGroups = function (){
-	this.baseGroupSize = this.classNames.length / this.numGroups,
+	this.baseGroupSize = Math.floor(this.classNames.length / this.numGroups),
 	this.extras = Math.floor(this.classNames.length % this.numGroups);	
 }
 
@@ -65,34 +65,32 @@ SizeClassGroups.prototype.getGroupNumber = function () {
 	this.extras = this.classNames.length - (this.numGroups * this.baseGroupSize);
 }
 
+function select() {
+		$('.selected').removeClass('selected');
+		$(this).addClass('selected');
+	}
+
+
 $(document).ready(function (){
-	$(".groupButton").click(function(){
-		$('.selected').removeClass('selected');
-		$(this).addClass('selected');
-	});
-	$(".sizeButton").click(function(){
-		$('.selected').removeClass('selected');
-		$(this).addClass('selected');
-	});
+	$(".groupButton").click(select);
+	$(".sizeButton").click(select);
 
 	$("#generate").click(function(){
 		$(".container").remove();
+		var selected = $(".selected")
 		var classGroups;
-		if ($(".selected").is(".groupButton")){
-			var numGroups = ($(".groupButton.selected").text());
-			classGroups = new NumberClassGroups(numGroups, APP.ids.classNames);
+		if ($(selected).is(".groupButton")){
+			classGroups = new NumberClassGroups($(selected).text(), APP.ids.classNames);
 			classGroups.organizeGroups();
 		} else {
-			var groupSize = ($(".sizeButton.selected").text());
-			classGroups = new SizeClassGroups(groupSize, APP.ids.classNames);
+			classGroups = new SizeClassGroups($(selected).text(), APP.ids.classNames);
 			classGroups.getGroupNumber();
-			console.log(classGroups);
 		}
 		
+
 		classGroups.shuffleClass();
-		console.log(classGroups);
 		classGroups.generateGroups();
-		console.log(classGroups);
+
 		
 		var nameId = 0;
 		for ( var i = 0; i < classGroups.numGroups; i++){
